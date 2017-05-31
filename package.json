@@ -1,15 +1,15 @@
 {
-  "name": "serverless-webpack-plugin",
-  "version": "0.4.5",
+  "name": "@sandfox/serverless-webpack-plugin",
+  "version": "0.5.0",
   "engines": {
     "node": ">=4.0"
   },
   "description": "Serverless Webpack Plugin - Significantly reduces Lambda file size and improves performance",
-  "author": "asprouse",
+  "author": "sandfox",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/asprouse/serverless-webpack-plugin"
+    "url": "https://github.com/sandfox/serverless-webpack-plugin"
   },
   "keywords": [
     "serverless webpack plugin",
@@ -32,7 +32,7 @@
     "test": "NODE_PATH=. mocha \"test/**/*.test.js\""
   },
   "peerDependencies": {
-    "webpack": "^1.12.14"
+    "webpack": "2.x.x"
   },
   "devDependencies": {
     "chai": "^3.4.1",

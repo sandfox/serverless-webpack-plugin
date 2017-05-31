@@ -1,12 +1,13 @@
-Serverless Webpack Plugin
+Serverless Webpack Plugin (fork)
 =============================
 
-Forked from [serverless-optimizer-plugin](https://github.com/serverless/serverless-optimizer-plugin) this plugin uses 
-webpack to optimize your Serverless Node.js Functions on deployment.
 
-Reducing the file size of your AWS Lambda Functions allows AWS to provision them more quickly, speeding up the response 
-time of your Lambdas.  Smaller Lambda sizes also helps you develop faster because you can upload them faster.  
-This Severless Plugin is absolutely recommended for every project including Lambdas with Node.js.
+Forked from [serverless-webpack-plugin](https://github.com/asprouse/serverless-webpack-plugin) which is itself forked from [serverless-optimizer-plugin](https://github.com/serverless/serverless-optimizer-plugin). 
+
+This plugin uses webpack to optimize your Serverless Node.js Functions on deployment.
+
+
+This fork has some bugfixes and behaviour breaks.
 
 **Note:** Requires Serverless *v0.5.0*.
 
@@ -14,14 +15,14 @@ This Severless Plugin is absolutely recommended for every project including Lamb
 
 * Install the plugin and webpack in the root of your Serverless Project:
 ```
-npm install serverless-webpack-plugin webpack --save-dev
+npm install @sandfox/serverless-webpack-plugin webpack --save-dev
 ```
 
 * Add the plugin to the `plugins` array in your Serverless Project's `s-project.json`, like this:
 
 ```
 plugins: [
-    "serverless-webpack-plugin"
+    "@sandfox/serverless-webpack-plugin"
 ]
 ```
 
@@ -42,6 +43,8 @@ plugins: [
 
 
 ## Webpack config
+_TODO: make this example webpack2 or delete_
+
 This plugin allows you to completely customize how your code is optimized by specifying your own webpack config. Heres a sample `webpack.config.js`:
 
 ```javascript
