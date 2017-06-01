@@ -81,8 +81,12 @@ module.exports = function getPlugin(S) {
 
           // override entry and output
           webpackConfig.context = path.dirname(func.getFilePath());
-          if (Array.isArray(webpackConfig.entry)) {
-            webpackConfig.entry.push(handlerEntryPath);
+          if (webpackConfig.entry != null) {
+            if (Array.isArray(webpackConfig.entry)) {
+              webpackConfig.entry.push(handlerEntryPath);
+            } else {
+              webpackConfig.entry = [webpackConfig.entry, handlerEntryPath];
+            }
           } else {
             webpackConfig.entry = handlerEntryPath;
           }
