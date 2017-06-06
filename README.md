@@ -7,7 +7,7 @@ Forked from [serverless-webpack-plugin](https://github.com/asprouse/serverless-w
 This plugin uses webpack to optimize your Serverless Node.js Functions on deployment.
 
 
-This fork has some bugfixes and behaviour breaks.
+This fork has some bugfixes and behaviour breaks. It no longer handles copying/moving node_modules for you and instead expects them all to handled via webpack
 
 **Note:** Requires Serverless *v0.5.0*.
 

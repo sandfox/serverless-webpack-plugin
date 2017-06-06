@@ -5,8 +5,6 @@ const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs-extra"));
 
 const getConfig = require("./lib/getConfig");
-const getExternalsFromStats = require("./lib/getExternalsFromStats");
-const copyModules = require("./lib/copyModules");
 
 function runWebpack(config) {
   return new Promise((resolve, reject) => {
@@ -109,12 +107,7 @@ module.exports = function getPlugin(S) {
               .then(() => runWebpack(webpackConfig))
               .then(stats => {
                 logStats(stats);
-                const externals = getExternalsFromStats(stats);
-                return copyModules(
-                  projectPath,
-                  externals,
-                  optimizedModulesPath
-                );
+                return Promise.resolve();
               })
               .then(() => {
               evt.options.pathDist = optimizedPath; // eslint-disable-line
