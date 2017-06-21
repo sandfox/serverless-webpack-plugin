@@ -1,6 +1,6 @@
 {
   "name": "@sandfox/serverless-webpack-plugin",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "engines": {
     "node": ">=4.0"
   },
@@ -34,7 +34,7 @@
     "lint:fix": "eslint --fix index.js lib/ test/"
   },
   "peerDependencies": {
-    "webpack": "2.x.x"
+    "webpack": "3.x.x"
   },
   "devDependencies": {
     "chai": "^3.4.1",
@@ -51,7 +51,6 @@
   },
   "dependencies": {
     "bluebird": "^3.1.1",
-    "clone": "^1.0.2",
     "fs-extra": "^0.26.7"
   }
 }
