@@ -88,11 +88,14 @@ module.exports = function getPlugin(S) {
           } else {
             webpackConfig.entry = handlerEntryPath;
           }
-          webpackConfig.output = {
+
+          const outputConfig = {
             libraryTarget: "commonjs",
             path: optimizedPath,
             filename: handlerFileName
-          };
+          }
+
+          webpackConfig.output = Object.assign({}, webpackConfig.output, outputConfig)
 
           // copy generated handler so we can build directly from the source directory
           const generatedHandler = path.join(
