@@ -81,7 +81,8 @@ module.exports = function getPlugin(S) {
           webpackConfig.context = path.dirname(func.getFilePath());
           if (webpackConfig.entry != null) {
             if (Array.isArray(webpackConfig.entry)) {
-              webpackConfig.entry.push(handlerEntryPath);
+              // clone and add our entry
+              webpackConfig.entry = webpackConfig.entry.slice(0).push(handlerEntryPath);
             } else {
               webpackConfig.entry = [webpackConfig.entry, handlerEntryPath];
             }

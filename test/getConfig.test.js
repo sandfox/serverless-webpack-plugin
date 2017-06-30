@@ -88,8 +88,6 @@ describe.only("getConfig", () => {
     const func = {};
     const result = getConfig(projectPath, project, func);
     const webpackConfig = require("./data/webpack.conf.js");
-
-    assert.notStrictEqual(result.webpackConfig, webpackConfig);
     assert.deepEqual(result, {
       handlerExt: "js",
       configPath: "./webpack.conf.js",
