@@ -82,7 +82,8 @@ module.exports = function getPlugin(S) {
           if (webpackConfig.entry != null) {
             if (Array.isArray(webpackConfig.entry)) {
               // clone and add our entry
-              webpackConfig.entry = webpackConfig.entry.slice(0).push(handlerEntryPath);
+              webpackConfig.entry = webpackConfig.entry.slice(0)
+              webpackConfig.entry.push(handlerEntryPath);
             } else {
               webpackConfig.entry = [webpackConfig.entry, handlerEntryPath];
             }

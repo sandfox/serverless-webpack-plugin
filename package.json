@@ -1,6 +1,6 @@
 {
   "name": "@sandfox/serverless-webpack-plugin",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "engines": {
     "node": ">=4.0"
   },
