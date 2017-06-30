@@ -3,7 +3,7 @@ const path = require("path");
 const webpack = require("webpack");
 const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs-extra"));
-
+const Pqueue = require("p-queue");
 const getConfig = require("./lib/getConfig");
 
 function runWebpack(config) {
@@ -37,8 +37,17 @@ module.exports = function getPlugin(S) {
       return `com.serverless.${ServerlessWebpack.name}`;
     }
 
+    constructor() {
+      super()
+      // Terrible hack to prevent swamping of the processor
+      // when building large numbers of functions
+      this._workQueue = new Pqueue({concurrency: 1})
+    }
+
     registerHooks() {
-      S.addHook(this.optimize.bind(this), {
+      S.addHook(evt => {
+        return this._workQueue.add(() => this.optimize(evt))
+      }, {
         action: "codeDeployLambda",
         event: "pre"
       });
@@ -112,7 +121,9 @@ module.exports = function getPlugin(S) {
               .then(() => runWebpack(webpackConfig))
               .then(stats => {
                 logStats(stats);
-                return Promise.resolve();
+                if(stats.hasErrors()) {
+                  throw new Error('webpack compilation error')
+                }
               })
               .then(() => {
               evt.options.pathDist = optimizedPath; // eslint-disable-line
