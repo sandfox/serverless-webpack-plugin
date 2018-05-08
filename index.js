@@ -1,10 +1,13 @@
 "use strict";
 const path = require("path");
+const os = require('os')
 const webpack = require("webpack");
 const Promise = require("bluebird");
 const fs = Promise.promisifyAll(require("fs-extra"));
 const Pqueue = require("p-queue");
 const getConfig = require("./lib/getConfig");
+
+const debugOutput = process.env['DEBUG_SERVERLESS_WEBPACK_PLUGIN'] != undefined
 
 function runWebpack(config) {
   return new Promise((resolve, reject) => {
@@ -21,15 +24,34 @@ module.exports = function getPlugin(S) {
   const SCli = require(S.getServerlessPath("utils/cli"));
 
   function logStats(stats) {
-    SCli.log(
-      stats.toString({
-        colors: true,
+    const { time, assets, warnings } = stats.toJson({
         hash: false,
         version: false,
         chunks: false,
-        children: false
+        children: false,
+        chunks: false,
+        cached: false,
+        children: false,
+        modules: false,
+        performance: false
       })
-    );
+    // clear output bug
+    SCli.spinner().stop(true)
+    SCli.log(`Webpack compile time: ${time/1000} s`)
+    assets.forEach(({name, size}) => {
+      SCli.log(`Webpack output: ${name}, ${formatSize(size)}`)
+    });
+
+    if(debugOutput) {
+      console.log(stats.toString('verbose'))
+    }
+
+    if(debugOutput && stats.hasWarnings()) {
+      warnings.forEach( warning => {
+        console.log('WARNING:', warning)
+      })
+    }
+
   }
 
   class ServerlessWebpack extends S.classes.Plugin {
@@ -41,7 +63,7 @@ module.exports = function getPlugin(S) {
       super()
       // Terrible hack to prevent swamping of the processor
       // when building large numbers of functions
-      this._workQueue = new Pqueue({concurrency: 1})
+      this._workQueue = new Pqueue({concurrency: Math.max(1, os.cpus().length - 1) })
     }
 
     registerHooks() {
@@ -101,7 +123,7 @@ module.exports = function getPlugin(S) {
           }
 
           const outputConfig = {
-            libraryTarget: "commonjs",
+            libraryTarget: "commonjs2",
             path: optimizedPath,
             filename: handlerFileName
           }
@@ -121,7 +143,9 @@ module.exports = function getPlugin(S) {
               .then(() => runWebpack(webpackConfig))
               .then(stats => {
                 logStats(stats);
+
                 if(stats.hasErrors()) {
+                  console.log(stats.toString('errors-only'))
                   throw new Error('webpack compilation error')
                 }
               })
@@ -140,4 +164,19 @@ module.exports = function getPlugin(S) {
   }
 
   return ServerlessWebpack;
+};
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Sean Larkin @thelarkinn
+*/
+function formatSize (size) {
+  if(size <= 0) {
+    return "0 bytes";
+  }
+
+  const abbreviations = ["bytes", "kB", "MB", "GB"];
+  const index = Math.floor(Math.log(size) / Math.log(1000));
+
+  return `${+(size / Math.pow(1000, index)).toPrecision(3)} ${abbreviations[index]}`;
 };
